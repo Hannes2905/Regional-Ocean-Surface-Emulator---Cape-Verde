@@ -1,0 +1,32 @@
+project: ROSE-CV
+module:
+  _target_: module.ROSE_forecast.ROSEForecastModule
+  name: ${name}
+  residual_prediction: True  # True: UNet predicts delta (next-current), better for small changes.
+                             # False: UNet predicts absolute next_state.
+
+# Embedder configuration
+embedder:
+  _target_: module.embedder.SimpleEmbedder
+  n_vars: 1         
+  load_prev: True
+
+# UNet backbone configuration
+# n_channels and n_classes are set dynamically from the embedder in ROSEForecastModule.
+UNET:
+  _target_: backbone_src.UNet.UNet.UNet
+  features_start: 32
+  depth: 4
+  num_conv_layers: 2
+  num_bottleneck_layers: 2
+  bottleneck_type: convolution
+  kernel_size: 3
+  padding: 1
+  mask_update: False
+  conv_norm: null
+  dropout_rate: 0.0
+  dropout_output: 0.0
+  activation_type: ReLU
+  norm_type: batch
+  upsample_mode: nearest
+  init_mode: local

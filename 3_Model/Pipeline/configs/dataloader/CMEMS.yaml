@@ -1,0 +1,30 @@
+defaults:
+  - _self_
+
+# Variables to load from the NetCDF file.
+# Currently: only thetao. Later: add uo, vo here.
+variables: &default_variables
+  - thetao
+
+dataset:
+  _target_: dataloaders.CMEMS.CMEMSDataset
+  path: file_path
+  variables: *default_variables
+  domain: train
+  train_frac: 0.8
+  lead_time_hours: 24
+  multistep: 1
+  load_prev: True
+  norm_scheme: "z-score"
+  data_mean:
+    thetao: 20
+  data_std:
+    thetao: 2
+
+# Overrides for test split (same file, different time range)
+test_args:
+  domain: test
+
+# Overrides for validation (later: use a separate file by overriding path)
+validation_args:
+  domain: test  # Temporary: use test split. Later: separate validation file.

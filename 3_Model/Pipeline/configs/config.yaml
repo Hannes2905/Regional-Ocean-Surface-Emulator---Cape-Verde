@@ -1,0 +1,29 @@
+# Specify which configs to use.
+defaults:
+  - cluster: local  # Tells hydra to use cluster/local.yaml when composing the cfg object.
+  - dataloader: CMEMS
+  - module: DESIM
+  - override hydra/job_logging: none
+  - override hydra/hydra_logging: none
+  - _self_
+
+
+# Wandb logging
+log: False # Turn off and on wandb logging
+entity: username_here # Wandb username
+project: ROSE-CV #projectname
+name: ROSE-CV_run_v # simulation name
+# exp_dir is set automatically to Hydra's timestamped output folder (outputs/YYYY-MM-DD/HH-MM-SS/)
+resume: False  # To resume a previous run, loads checkpoint and cfg from `exp_dir`.
+
+seed: 1104
+max_steps: 400000 
+batch_size: ${cluster.batch_size}
+
+save_step_frequency: 1000 
+log_freq: 100
+limit_val_batches: null
+accumulate_grad_batches: 1
+debug: False # set to True to debug
+
+mode: train  # Specify "train" or "test" to run training or inference.
